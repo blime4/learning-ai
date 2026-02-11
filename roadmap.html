@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>llama.cpp 学习路线图</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --yellow: #d29922; --purple: #bc8cff;
+    --red: #f85149; --orange: #f0883e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+  header { text-align: center; padding: 40px 0 32px; }
+  header h1 { font-size: 2em; margin-bottom: 8px; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--muted); font-size: 0.95em; }
+
+  /* Overall progress */
+  .overall { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; }
+  .overall h2 { font-size: 1.1em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .overall h2 .emoji { font-size: 1.3em; }
+  .progress-bar { background: var(--border); border-radius: 8px; height: 20px; overflow: hidden; position: relative; }
+  .progress-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--green), var(--accent)); transition: width 0.5s ease; }
+  .progress-text { text-align: center; margin-top: 8px; color: var(--muted); font-size: 0.9em; }
+  .stats { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .stat { display: flex; align-items: center; gap: 6px; font-size: 0.85em; color: var(--muted); }
+  .stat .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Streak */
+  .streak-bar { display: flex; align-items: center; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .streak-bar .fire { font-size: 1.4em; }
+  .streak-info { font-size: 0.85em; color: var(--muted); }
+  .streak-info strong { color: var(--orange); font-size: 1.1em; }
+  .streak-cal { display: flex; gap: 3px; margin-left: auto; }
+  .streak-day { width: 14px; height: 14px; border-radius: 3px; background: var(--border); }
+  .streak-day.active { background: var(--green); }
+  .streak-day.today { outline: 2px solid var(--accent); }
+
+  /* Phase */
+  .phase { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+  .phase-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none; }
+  .phase-header:hover { background: rgba(88,166,255,0.05); }
+  .phase-icon { font-size: 1.3em; }
+  .phase-title { flex: 1; font-size: 1em; font-weight: 600; }
+  .phase-badge { font-size: 0.75em; padding: 2px 10px; border-radius: 12px; background: var(--border); color: var(--muted); }
+  .phase-badge.done { background: rgba(63,185,80,0.15); color: var(--green); }
+  .phase-arrow { color: var(--muted); transition: transform 0.3s; font-size: 0.8em; }
+  .phase.open .phase-arrow { transform: rotate(90deg); }
+  .phase-progress { height: 3px; background: var(--border); }
+  .phase-progress-fill { height: 100%; background: var(--green); transition: width 0.4s; }
+  .phase-body { display: none; padding: 0 20px 16px; }
+  .phase.open .phase-body { display: block; }
+
+  /* Item */
+  .item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .item:last-child { border-bottom: none; }
+  .item input[type="checkbox"] { appearance: none; width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; flex-shrink: 0; margin-top: 2px; position: relative; transition: all 0.2s; }
+  .item input[type="checkbox"]:checked { background: var(--green); border-color: var(--green); }
+  .item input[type="checkbox"]:checked::after { content: '✓'; position: absolute; top: -1px; left: 3px; color: #fff; font-size: 14px; font-weight: bold; }
+  .item-num { color: var(--accent); font-weight: 700; font-size: 0.85em; min-width: 28px; margin-top: 2px; }
+  .item-content { flex: 1; }
+  .item-file { font-size: 0.85em; color: var(--purple); word-break: break-all; }
+  .item-file a { color: var(--purple); text-decoration: none; }
+  .item-file a:hover { text-decoration: underline; }
+  .item-desc { font-size: 0.85em; color: var(--muted); margin-top: 2px; }
+  .item.checked .item-file a { color: var(--muted); text-decoration: line-through; }
+  .item.checked .item-desc { text-decoration: line-through; opacity: 0.6; }
+  .item-date { font-size: 0.7em; color: var(--muted); margin-top: 4px; }
+
+  /* Buttons */
+  .actions { text-align: center; margin: 24px 0; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+  footer { text-align: center; padding: 32px 0; color: var(--muted); font-size: 0.8em; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🦙 <span>llama.cpp</span> 学习路线图</h1>
+    <p>46 个知识点 · 10 个阶段 · 从基础到 Agent 全覆盖</p>
+  </header>
+
+  <div class="overall">
+    <h2><span class="emoji">📊</span> 总体进度</h2>
+    <div class="progress-bar"><div class="progress-fill" id="overallFill" style="width:0%"></div></div>
+    <div class="progress-text" id="overallText">0 / 48 完成 (0%)</div>
+    <div class="stats">
+      <div class="stat"><span class="dot" style="background:var(--green)"></span> <span id="statDone">0</span> 已完成</div>
+      <div class="stat"><span class="dot" style="background:var(--border)"></span> <span id="statTodo">48</span> 待学习</div>
+      <div class="stat"><span class="dot" style="background:var(--accent)"></span> 预计 <span id="statDays">48</span> 天</div>
+    </div>
+    <div class="streak-bar">
+      <span class="fire">🔥</span>
+      <div class="streak-info">连续学习 <strong id="streakCount">0</strong> 天</div>
+      <div class="streak-cal" id="streakCal"></div>
+    </div>
+  </div>
+
+  <div id="phases"></div>
+
+  <div class="actions">
+    <button class="btn" onclick="expandAll()">展开全部</button>
+    <button class="btn" onclick="collapseAll()">折叠全部</button>
+    <button class="btn" onclick="exportProgress()">导出进度 JSON</button>
+    <button class="btn" onclick="importProgress()">导入进度</button>
+    <button class="btn danger" onclick="resetAll()">重置进度</button>
+  </div>
+
+  <footer>数据保存在浏览器 localStorage · 基于 <a href="https://github.com/blime4/learning-ai" style="color:var(--accent)">learning-ai</a> 仓库</footer>
+</div>
+
+<script>
+const REPO = 'https://github.com/blime4/learning-ai/blob/main/';
+const PHASES = [
+  {icon:'🏗️', title:'第一阶段：基础与环境搭建', items:[
+    {n:'1', files:['fundamentals/ggml/README.md'], desc:'GGML 底层张量库 — tensor、backend、计算图'},
+    {n:'2', files:['fundamentals/llama.cpp/README.md'], desc:'项目入口：子模块配置、编译、GDB 调试、CUDA 构建'},
+    {n:'3', files:['notes/llama.cpp/debugging.md'], desc:'调试技巧'},
+  ]},
+  {icon:'⚙️', title:'第二阶段：核心概念（推理流水线）', items:[
+    {n:'4', files:['fundamentals/llama.cpp/src/tokenize.cpp','notes/llama.cpp/llama-vocab-notes.md'], desc:'分词器 — 推理的第一步'},
+    {n:'5', files:['fundamentals/llama.cpp/src/simple-prompt.cpp'], desc:'最简单的推理示例'},
+    {n:'6', files:['notes/llama.cpp/llama-batch.md'], desc:'llama_batch / llama_ubatch 结构'},
+    {n:'7', files:['notes/llama.cpp/process_ubatch.md'], desc:'micro-batch 处理细节'},
+    {n:'8', files:['notes/llama.cpp/kv-cache.md'], desc:'KV 缓存机制 — 推理加速核心'},
+    {n:'9', files:['fundamentals/llama.cpp/src/kv-cache.cpp'], desc:'KV 缓存代码实践'},
+    {n:'10', files:['notes/llama.cpp/graph-inputs.md'], desc:'计算图输入构建'},
+    {n:'11', files:['notes/llama.cpp/gpu-sampling.md'], desc:'GPU 采样（temperature、top-k、top-p）'},
+    {n:'12', files:['notes/llama.cpp/output_ids.md'], desc:'输出 token ID 处理'},
+    {n:'13', files:['fundamentals/llama.cpp/src/simple-prompt-multi.cpp'], desc:'多 prompt 批处理'},
+  ]},
+  {icon:'🚀', title:'第三阶段：GPU 加速与后端', items:[
+    {n:'14', files:['notes/llama.cpp/cuda.md'], desc:'CUDA 后端加载机制'},
+    {n:'15', files:['notes/llama.cpp/cuda-mul-mat.md'], desc:'CUDA 矩阵乘法'},
+    {n:'16', files:['notes/llama.cpp/cuda-fp16-release-build-issue.md'], desc:'FP16 构建问题'},
+    {n:'17', files:['fundamentals/ggml/src/llama-att-softmax.cpp'], desc:'attention softmax GGML 实现'},
+    {n:'18', files:['notes/llama.cpp/flash-attn-misalignment-issue.md'], desc:'Flash Attention 对齐问题'},
+    {n:'19', files:['notes/llama.cpp/macosx.md'], desc:'macOS (Metal) 平台'},
+    {n:'20', files:['notes/llama.cpp/ggml-threadpool-macos-issue.md'], desc:'线程池问题'},
+  ]},
+  {icon:'📦', title:'第四阶段：模型转换与量化', items:[
+    {n:'21', files:['notes/llama.cpp/convert.md'], desc:'convert_hf_to_gguf.py 流程'},
+    {n:'22', files:['notes/llama.cpp/quantization.md'], desc:'量化原理与 QAT'},
+    {n:'23', files:['notes/llama.cpp/convert-dequantize.md'], desc:'反量化过程'},
+    {n:'24', files:['notes/llama.cpp/devstral2-conversion.md'], desc:'Devstral2 转换实例'},
+    {n:'25', files:['notes/llama.cpp/convert-mamba-issue.md'], desc:'Mamba 转换问题'},
+    {n:'26', files:['notes/llama.cpp/gemma-bos-issue.md'], desc:'Gemma BOS token 问题'},
+  ]},
+  {icon:'🔢', title:'第五阶段：Embeddings', items:[
+    {n:'27', files:['fundamentals/llama.cpp/src/embeddings.cpp'], desc:'embedding 生成代码'},
+    {n:'28', files:['notes/llama.cpp/embeddings-presets.md'], desc:'embedding 预设配置'},
+  ]},
+  {icon:'🌐', title:'第六阶段：Server 与部署', items:[
+    {n:'29', files:['notes/llama.cpp/llama-server.md'], desc:'server 启动与 API'},
+    {n:'30', files:['notes/llama.cpp/server-checkpoints.md'], desc:'checkpoint 管理'},
+    {n:'31', files:['notes/llama.cpp/server-logprob-issue.md'], desc:'log probability 问题'},
+    {n:'32', files:['notes/llama.cpp/server-unit-tests.md'], desc:'server 测试'},
+    {n:'33', files:['notes/llama.cpp/llama-perplexity.md'], desc:'困惑度计算'},
+    {n:'34', files:['notes/llama.cpp/tests.md'], desc:'测试框架'},
+    {n:'35', files:['notes/llama.cpp/sbatch.md'], desc:'SLURM 批量提交'},
+  ]},
+  {icon:'🎯', title:'第七阶段：Finetuning', items:[
+    {n:'36', files:['fundamentals/llama.cpp/README.md'], desc:'LoRA 微调、Shakespeare、chat 格式训练'},
+  ]},
+  {icon:'👁️', title:'第八阶段：多模态与特殊模型', items:[
+    {n:'37', files:['notes/llama.cpp/llama-3-2-vision.md'], desc:'Llama 3.2 视觉模型'},
+    {n:'38', files:['notes/llama.cpp/qwen-2.5VL-3B-instruct.md'], desc:'Qwen 视觉模型'},
+    {n:'39', files:['notes/llama.cpp/vision-model-issue.md'], desc:'视觉模型问题'},
+    {n:'40', files:['fundamentals/image-processing/src/mllama.cpp'], desc:'Llama 视觉模型实现'},
+    {n:'41', files:['notes/llama.cpp/tts.md'], desc:'TTS 集成'},
+  ]},
+  {icon:'🤖', title:'第九阶段：Agent 与上层应用', items:[
+    {n:'42', files:['agents/llama-cpp-agent/README.md'], desc:'WASM agent 框架'},
+    {n:'43', files:['agents/llama-cpp-agent/agent/src/main.rs','agents/llama-cpp-agent/agent/src/agent.rs','agents/llama-cpp-agent/agent/src/tool.rs'], desc:'Rust agent 实现'},
+  ]},
+  {icon:'🔗', title:'第十阶段：其他语言绑定与集成', items:[
+    {n:'44', files:['fundamentals/python/src/llama-chat-format.py'], desc:'Python chat 格式'},
+    {n:'45', files:['fundamentals/rust/llm-chains-llama-example/README.md'], desc:'Rust LLM chains + Llama'},
+    {n:'46', files:['fundamentals/rust/llm-chains-chat-demo/src/main-llama.rs'], desc:'Rust chat demo'},
+  ]},
+  {icon:'📝', title:'补充：Issue 笔记', items:[
+    {n:'A1', files:['notes/llama.cpp/sched-issue.md'], desc:'调度问题'},
+    {n:'A2', files:['notes/llama.cpp/update_chat_msg-issue.md'], desc:'chat 消息更新问题'},
+  ]},
+];
+
+const STORAGE_KEY = 'llama-roadmap-progress';
+const STREAK_KEY  = 'llama-roadmap-streak';
+
+function load() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function save(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
+function loadStreak() { try { return JSON.parse(localStorage.getItem(STREAK_KEY)) || {dates:[]}; } catch { return {dates:[]}; } }
+function saveStreak(s) { localStorage.setItem(STREAK_KEY, JSON.stringify(s)); }
+
+function todayStr() { return new Date().toISOString().slice(0,10); }
+
+function recordToday() {
+  const s = loadStreak();
+  const t = todayStr();
+  if (!s.dates.includes(t)) { s.dates.push(t); s.dates.sort(); saveStreak(s); }
+  updateStreak();
+}
+
+function calcStreak() {
+  const s = loadStreak();
+  if (!s.dates.length) return 0;
+  let streak = 0;
+  let d = new Date(); d.setHours(0,0,0,0);
+  // check if today is in dates
+  const tStr = todayStr();
+  if (!s.dates.includes(tStr)) {
+    d.setDate(d.getDate() - 1);
+  }
+  while (true) {
+    const ds = d.toISOString().slice(0,10);
+    if (s.dates.includes(ds)) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function updateStreak() {
+  document.getElementById('streakCount').textContent = calcStreak();
+  // render last 14 days
+  const cal = document.getElementById('streakCal');
+  cal.innerHTML = '';
+  const s = loadStreak();
+  const t = todayStr();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const ds = d.toISOString().slice(0,10);
+    const el = document.createElement('div');
+    el.className = 'streak-day' + (s.dates.includes(ds) ? ' active' : '') + (ds === t ? ' today' : '');
+    el.title = ds;
+    cal.appendChild(el);
+  }
+}
+
+function render() {
+  const data = load();
+  const container = document.getElementById('phases');
+  container.innerHTML = '';
+  let totalDone = 0, totalAll = 0;
+
+  PHASES.forEach((phase, pi) => {
+    const div = document.createElement('div');
+    div.className = 'phase' + (pi < 2 ? ' open' : '');
+    let phaseDone = 0;
+
+    let itemsHtml = '';
+    phase.items.forEach(item => {
+      totalAll++;
+      const key = 'item-' + item.n;
+      const checked = data[key]?.done || false;
+      const doneDate = data[key]?.date || '';
+      if (checked) { phaseDone++; totalDone++; }
+      const filesHtml = item.files.map(f => `<a href="${REPO}${f}" target="_blank">${f.split('/').pop()}</a>`).join(' / ');
+      itemsHtml += `
+        <div class="item ${checked?'checked':''}">
+          <input type="checkbox" ${checked?'checked':''} data-key="${key}">
+          <span class="item-num">#${item.n}</span>
+          <div class="item-content">
+            <div class="item-file">${filesHtml}</div>
+            <div class="item-desc">${item.desc}</div>
+            ${doneDate ? `<div class="item-date">✅ ${doneDate}</div>` : ''}
+          </div>
+        </div>`;
+    });
+
+    const badgeClass = phaseDone === phase.items.length ? 'done' : '';
+    const pct = phase.items.length ? Math.round(phaseDone / phase.items.length * 100) : 0;
+
+    div.innerHTML = `
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="phase-icon">${phase.icon}</span>
+        <span class="phase-title">${phase.title}</span>
+        <span class="phase-badge ${badgeClass}">${phaseDone}/${phase.items.length}</span>
+        <span class="phase-arrow">▶</span>
+      </div>
+      <div class="phase-progress"><div class="phase-progress-fill" style="width:${pct}%"></div></div>
+      <div class="phase-body">${itemsHtml}</div>`;
+    container.appendChild(div);
+  });
+
+  // Update overall
+  const pct = totalAll ? Math.round(totalDone / totalAll * 100) : 0;
+  document.getElementById('overallFill').style.width = pct + '%';
+  document.getElementById('overallText').textContent = `${totalDone} / ${totalAll} 完成 (${pct}%)`;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statTodo').textContent = totalAll - totalDone;
+  document.getElementById('statDays').textContent = totalAll - totalDone;
+
+  // Bind checkboxes
+  document.querySelectorAll('.item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const d = load();
+      const key = this.dataset.key;
+      if (this.checked) {
+        d[key] = { done: true, date: todayStr() };
+        recordToday();
+      } else {
+        delete d[key];
+      }
+      save(d);
+      render();
+    });
+  });
+
+  updateStreak();
+}
+
+function expandAll() { document.querySelectorAll('.phase').forEach(p => p.classList.add('open')); }
+function collapseAll() { document.querySelectorAll('.phase').forEach(p => p.classList.remove('open')); }
+
+function exportProgress() {
+  const d = { progress: load(), streak: loadStreak() };
+  const blob = new Blob([JSON.stringify(d, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'llama-roadmap-progress.json';
+  a.click();
+}
+
+function importProgress() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const d = JSON.parse(ev.target.result);
+        if (d.progress) save(d.progress);
+        if (d.streak) saveStreak(d.streak);
+        render();
+        alert('导入成功！');
+      } catch { alert('JSON 格式错误'); }
+    };
+    r.readAsText(f);
+  };
+  input.click();
+}
+
+function resetAll() {
+  if (!confirm('确定要重置所有学习进度吗？此操作不可撤销。')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(STREAK_KEY);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
