@@ -80,6 +80,66 @@
   .btn.danger:hover { border-color: var(--red); color: var(--red); }
 
   footer { text-align: center; padding: 32px 0; color: var(--muted); font-size: 0.8em; }
+
+  /* Animation Modal Styles */
+  .anim-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+  .anim-modal.open { display: flex; }
+  .anim-content { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 90%; max-width: 900px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+  .anim-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .anim-header h3 { font-size: 1.1em; display: flex; align-items: center; gap: 8px; }
+  .anim-close { background: none; border: none; color: var(--muted); font-size: 1.5em; cursor: pointer; padding: 4px 8px; line-height: 1; }
+  .anim-close:hover { color: var(--text); }
+  .anim-body { flex: 1; overflow-y: auto; padding: 20px; }
+
+  /* Animation Stage */
+  .anim-stage { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; min-height: 180px; overflow-x: auto; }
+  .anim-title { font-size: 0.85em; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .linked-list { display: flex; align-items: center; gap: 8px; min-width: max-content; padding: 20px 10px; }
+  .ll-node { background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 70px; transition: all 0.4s ease; position: relative; }
+  .ll-node.active { border-color: var(--accent); box-shadow: 0 0 20px rgba(88,166,255,0.3); }
+  .ll-node.merged { border-color: var(--green); background: rgba(63,185,80,0.1); }
+  .ll-node .char { font-size: 1.4em; font-weight: 700; color: var(--text); }
+  .ll-node .meta { font-size: 0.7em; color: var(--muted); margin-top: 4px; font-family: monospace; }
+  .ll-arrow { color: var(--accent); font-size: 1.2em; opacity: 0.6; }
+  .ll-arrow.inactive { opacity: 0.15; }
+
+  /* Queue visualization */
+  .queue-area { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
+  .queue-items { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .queue-item { background: var(--border); padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-family: monospace; }
+  .queue-item.top { background: var(--accent); color: #000; }
+  .queue-item.done { opacity: 0.4; text-decoration: line-through; }
+
+  /* Description */
+  .anim-desc { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.2); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .anim-desc h4 { font-size: 0.95em; margin-bottom: 8px; color: var(--accent); }
+  .anim-desc p { font-size: 0.85em; color: var(--text); line-height: 1.6; margin: 0; }
+
+  /* Code block */
+  .anim-code { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .anim-code pre { margin: 0; padding: 16px; overflow-x: auto; font-size: 0.8em; line-height: 1.5; }
+  .anim-code code { font-family: 'JetBrains Mono', 'Fira Code', monospace; color: var(--muted); }
+  .anim-code .line { display: block; padding: 2px 8px; margin: 0 -8px; border-radius: 4px; }
+  .anim-code .line.hl { background: rgba(88,166,255,0.15); color: var(--text); }
+  .anim-code .keyword { color: var(--purple); }
+  .anim-code .string { color: var(--green); }
+  .anim-code .comment { color: var(--muted); font-style: italic; }
+  .anim-code .number { color: var(--orange); }
+
+  /* Navigation */
+  .anim-nav { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 16px 20px; border-top: 1px solid var(--border); }
+  .anim-nav button { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
+  .anim-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .anim-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .step-dots { display: flex; gap: 6px; }
+  .step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.2s; }
+  .step-dot.active { background: var(--accent); transform: scale(1.2); }
+  .step-dot:hover { background: var(--muted); }
+  .step-counter { font-size: 0.8em; color: var(--muted); }
+
+  /* Animation button in items */
+  .anim-btn { background: linear-gradient(135deg, var(--accent), var(--purple)); border: none; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; cursor: pointer; margin-left: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+  .anim-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(88,166,255,0.3); }
 </style>
 </head>
 <body>
@@ -118,6 +178,39 @@
   <footer>数据保存在浏览器 localStorage · 基于 <a href="https://github.com/blime4/learning-ai" style="color:var(--accent)">learning-ai</a> 仓库</footer>
 </div>
 
+<!-- Animation Modal -->
+<div class="anim-modal" id="animModal">
+  <div class="anim-content">
+    <div class="anim-header">
+      <h3>🎬 BPE 分词动画讲解</h3>
+      <button class="anim-close" onclick="closeAnimModal()">&times;</button>
+    </div>
+    <div class="anim-body">
+      <div class="anim-stage">
+        <div class="anim-title">链表可视化 (llm_symbol)</div>
+        <div class="linked-list" id="animLinkedList"></div>
+        <div class="queue-area" id="animQueueArea" style="display:none;">
+          <div class="anim-title">优先队列 (work_queue)</div>
+          <div class="queue-items" id="animQueue"></div>
+        </div>
+      </div>
+      <div class="anim-desc">
+        <h4 id="animStepTitle">步骤标题</h4>
+        <p id="animStepDesc">步骤描述</p>
+      </div>
+      <div class="anim-code">
+        <pre><code id="animCode"></code></pre>
+      </div>
+    </div>
+    <div class="anim-nav">
+      <button id="animPrevBtn" onclick="animPrev()">◀ 上一步</button>
+      <div class="step-dots" id="animDots"></div>
+      <span class="step-counter" id="animCounter">1 / 8</span>
+      <button id="animNextBtn" onclick="animNext()">下一步 ▶</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const REPO = 'https://github.com/blime4/learning-ai/blob/main/';
 const PHASES = [
@@ -127,7 +220,7 @@ const PHASES = [
     {n:'3', files:['notes/llama.cpp/debugging.md'], desc:'调试技巧'},
   ]},
   {icon:'⚙️', title:'第二阶段：核心概念（推理流水线）', items:[
-    {n:'4', files:['fundamentals/llama.cpp/src/tokenize.cpp','notes/llama.cpp/llama-vocab-notes.md'], desc:'分词器 — 推理的第一步'},
+    {n:'4', files:['fundamentals/llama.cpp/src/tokenize.cpp','notes/llama.cpp/llama-vocab-notes.md'], desc:'分词器 — 推理的第一步', anim:'bpe'},
     {n:'5', files:['fundamentals/llama.cpp/src/simple-prompt.cpp'], desc:'最简单的推理示例'},
     {n:'6', files:['notes/llama.cpp/llama-batch.md'], desc:'llama_batch / llama_ubatch 结构'},
     {n:'7', files:['notes/llama.cpp/process_ubatch.md'], desc:'micro-batch 处理细节'},
@@ -264,12 +357,13 @@ function render() {
       const doneDate = data[key]?.date || '';
       if (checked) { phaseDone++; totalDone++; }
       const filesHtml = item.files.map(f => `<a href="${REPO}${f}" target="_blank">${f.split('/').pop()}</a>`).join(' / ');
+      const animBtn = item.anim ? `<button class="anim-btn" onclick="event.stopPropagation(); openAnimModal();">🎬 动画讲解</button>` : '';
       itemsHtml += `
         <div class="item ${checked?'checked':''}">
           <input type="checkbox" ${checked?'checked':''} data-key="${key}">
           <span class="item-num">#${item.n}</span>
           <div class="item-content">
-            <div class="item-file">${filesHtml}</div>
+            <div class="item-file">${filesHtml}${animBtn}</div>
             <div class="item-desc">${item.desc}</div>
             ${doneDate ? `<div class="item-date">✅ ${doneDate}</div>` : ''}
           </div>
@@ -356,6 +450,281 @@ function resetAll() {
   localStorage.removeItem(STREAK_KEY);
   render();
 }
+
+// ========== Animation Modal ==========
+const ANIM_STEPS = [
+  {
+    title: "步骤 1: UTF-8 字符拆分",
+    desc: "将输入文本 'hello' 拆分为 UTF-8 字符。每个字符创建一个 llm_symbol 结构，包含 text 指针和长度 n。unicode_len_utf8() 函数根据首字节判断字符长度(1-4字节)。",
+    code: `<span class="line">while (offs < text.size()) {</span>
+<span class="line hl">    sym.text = text.c_str() + offs;</span>
+<span class="line hl">    sym.n = unicode_len_utf8(text[offs]);</span>
+<span class="line">    offs += sym.n;</span>
+<span class="line">    symbols.emplace_back(sym);</span>
+<span class="line">}</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1},
+      {text:'l',prev:1,next:3,idx:2},
+      {text:'l',prev:2,next:4,idx:3},
+      {text:'o',prev:3,next:-1,idx:4}
+    ],
+    active: [0,1,2,3,4],
+    queue: [],
+    showQueue: false
+  },
+  {
+    title: "步骤 2: 构建双向链表",
+    desc: "为每个 symbol 设置 prev 和 next 指针，形成双向链表。prev 指向前一个字符的索引，next 指向下一个字符的索引。首元素的 prev=-1，末元素的 next=-1。",
+    code: `<span class="line">sym.prev = index - 1;</span>
+<span class="line hl">sym.next = offs == text.size() ? -1 : index + 1;</span>
+<span class="line">index++;</span>
+<span class="line">symbols.emplace_back(sym);</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0,showPtr:true},
+      {text:'e',prev:0,next:2,idx:1,showPtr:true},
+      {text:'l',prev:1,next:3,idx:2,showPtr:true},
+      {text:'l',prev:2,next:4,idx:3,showPtr:true},
+      {text:'o',prev:3,next:-1,idx:4,showPtr:true}
+    ],
+    active: [0,1,2,3,4],
+    queue: [],
+    showQueue: false
+  },
+  {
+    title: "步骤 3: 初始化 Bigram 队列",
+    desc: "遍历所有相邻字符对，调用 try_add_bigram(i-1, i)。如果这对字符在 bpe_ranks 中存在，则创建 bigram 并加入优先队列。队列按 rank 排序（值越小优先级越高）。",
+    code: `<span class="line hl">// seed the work queue with all possible 2-char tokens</span>
+<span class="line hl">for (size_t i = 1; i < symbols.size(); ++i) {</span>
+<span class="line hl">    try_add_bigram(i - 1, i);</span>
+<span class="line">}</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1},
+      {text:'l',prev:1,next:3,idx:2},
+      {text:'l',prev:2,next:4,idx:3},
+      {text:'o',prev:3,next:-1,idx:4}
+    ],
+    active: [1,2,3],  // 正在处理的相邻对
+    queue: ['l+l(rank=5)', 'l+o(rank=12)'],
+    showQueue: true
+  },
+  {
+    title: "步骤 4: 查找 BPE Rank",
+    desc: "find_bpe_rank() 在 bpe_ranks 映射中查找字符对的合并优先级。rank 值越小表示该合并规则在训练中出现频率越高，应该优先执行。这里 'l'+'l' 的 rank=5 是最小的。",
+    code: `<span class="line">auto it = bpe_ranks.find(std::make_pair(token_left, token_right));</span>
+<span class="line">if (it == bpe_ranks.end()) return -1;</span>
+<span class="line hl">return it->second;  // return rank</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1},
+      {text:'l',prev:1,next:3,idx:2,active:true},
+      {text:'l',prev:2,next:4,idx:3,active:true},
+      {text:'o',prev:3,next:-1,idx:4}
+    ],
+    active: [2,3],
+    queue: ['<span class="top">l+l(rank=5)</span>', 'l+o(rank=12)'],
+    showQueue: true
+  },
+  {
+    title: "步骤 5: 弹出最高优先级 Bigram",
+    desc: "从优先队列弹出 rank 最小的 bigram。work_queue.top() 返回队首元素(l+l, rank=5)，work_queue.pop() 将其移除。这是 BPE 算法的核心：总是先合并最高频的字符对。",
+    code: `<span class="line">while (!work_queue.empty()) {</span>
+<span class="line hl">    auto bigram = work_queue.top();  // l+l, rank=5</span>
+<span class="line hl">    work_queue.pop();</span>
+<span class="line">    // ... process merge</span>
+<span class="line">}</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1},
+      {text:'l',prev:1,next:3,idx:2,active:true},
+      {text:'l',prev:2,next:4,idx:3,active:true},
+      {text:'o',prev:3,next:-1,idx:4}
+    ],
+    active: [2,3],
+    queue: ['<span class="done">l+l(rank=5)</span>', 'l+o(rank=12)'],
+    showQueue: true
+  },
+  {
+    title: "步骤 6: 执行合并",
+    desc: "将右侧 symbol 合并到左侧：left_symbol.n += right_symbol.n（长度相加），right_symbol.n = 0（标记为已删除）。然后更新链表指针：left_symbol.next 跳过 right，直接指向 right 的下一个。",
+    code: `<span class="line hl">// merge the right sym into the left one</span>
+<span class="line hl">left_symbol.n += right_symbol.n;  // "l" + "l" = "ll"</span>
+<span class="line hl">right_symbol.n = 0;  // mark as deleted</span>
+<span class="line">left_symbol.next = right_symbol.next;</span>
+<span class="line">symbols[right_symbol.next].prev = bigram.left;</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1},
+      {text:'ll',prev:1,next:4,idx:2,merged:true},
+      {text:'',prev:2,next:4,idx:3,deleted:true},
+      {text:'o',prev:2,next:-1,idx:4}
+    ],
+    active: [2],
+    queue: ['l+o(rank=12)'],
+    showQueue: true
+  },
+  {
+    title: "步骤 7: 添加新 Bigram",
+    desc: "合并后需要检查新产生的相邻对。调用 add_new_bigram(left_symbol.prev, bigram.left) 添加左侧新对(e-ll)，add_new_bigram(bigram.left, left_symbol.next) 添加右侧新对(ll-o)。",
+    code: `<span class="line hl">add_new_bigram(left_symbol.prev, bigram.left);  // e-ll</span>
+<span class="line hl">add_new_bigram(bigram.left, left_symbol.next);  // ll-o</span>
+<span class="line">// 继续循环，处理队列中的下一个 bigram</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1,active:true},
+      {text:'ll',prev:1,next:4,idx:2,merged:true,active:true},
+      {text:'',prev:2,next:4,idx:3,deleted:true},
+      {text:'o',prev:2,next:-1,idx:4,active:true}
+    ],
+    active: [1,2,4],
+    queue: ['l+o(rank=12)', 'e+ll(rank=8)', 'll+o(rank=15)'],
+    showQueue: true
+  },
+  {
+    title: "步骤 8: Resegment 输出 Token ID",
+    desc: "BPE 合并完成后，遍历链表调用 resegment()。如果 symbol.text 在 token_to_id 中存在，直接输出 token ID；否则递归查找 rev_merge 映射，将合并后的 token 拆分回原始 token。最终输出 token ID 序列。",
+    code: `<span class="line">for (int i = 0; i != -1; i = symbols[i].next) {</span>
+<span class="line hl">    resegment(symbol, output);</span>
+<span class="line">}</span>
+<span class="line"></span>
+<span class="line hl">// resegment: token_to_id.find(text) -> output token ID</span>`,
+    symbols: [
+      {text:'h',prev:-1,next:1,idx:0},
+      {text:'e',prev:0,next:2,idx:1},
+      {text:'ll',prev:1,next:4,idx:2,merged:true},
+      {text:'',prev:2,next:4,idx:3,deleted:true},
+      {text:'o',prev:2,next:-1,idx:4}
+    ],
+    active: [0,1,2,4],
+    queue: [],
+    showQueue: false,
+    output: 'Output: [h, e, ll, o] → token IDs'
+  }
+];
+
+let currentStep = 0;
+
+function openAnimModal() {
+  currentStep = 0;
+  renderAnimStep();
+  document.getElementById('animModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAnimModal() {
+  document.getElementById('animModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderAnimStep() {
+  const step = ANIM_STEPS[currentStep];
+
+  // Title and description
+  document.getElementById('animStepTitle').textContent = step.title;
+  document.getElementById('animStepDesc').textContent = step.desc;
+
+  // Code
+  document.getElementById('animCode').innerHTML = step.code;
+
+  // Render linked list
+  const listEl = document.getElementById('animLinkedList');
+  listEl.innerHTML = '';
+
+  step.symbols.forEach((sym, i) => {
+    if (sym.deleted) {
+      // Show deleted node with reduced opacity
+      const node = document.createElement('div');
+      node.className = 'll-node';
+      node.style.opacity = '0.2';
+      node.innerHTML = `<div class="char">×</div><div class="meta">del</div>`;
+      listEl.appendChild(node);
+    } else {
+      const node = document.createElement('div');
+      node.className = 'll-node';
+      if (step.active.includes(i)) node.classList.add('active');
+      if (sym.merged) node.classList.add('merged');
+
+      let meta = `prev:${sym.prev}`;
+      if (sym.showPtr) meta += ` next:${sym.next}`;
+      node.innerHTML = `<div class="char">${sym.text}</div><div class="meta">${meta}</div>`;
+      listEl.appendChild(node);
+    }
+
+    // Arrow (except after last visible node)
+    if (i < step.symbols.length - 1) {
+      const nextSym = step.symbols[i + 1];
+      const arrow = document.createElement('span');
+      arrow.className = 'll-arrow';
+      if (sym.deleted || (nextSym && nextSym.deleted)) {
+        arrow.classList.add('inactive');
+      }
+      arrow.textContent = '→';
+      listEl.appendChild(arrow);
+    }
+  });
+
+  // Queue
+  const queueArea = document.getElementById('animQueueArea');
+  const queueEl = document.getElementById('animQueue');
+  if (step.showQueue && step.queue.length > 0) {
+    queueArea.style.display = 'block';
+    queueEl.innerHTML = step.queue.map(q => `<span class="queue-item">${q}</span>`).join('');
+  } else {
+    queueArea.style.display = 'none';
+  }
+
+  // Output (for final step)
+  if (step.output) {
+    const outputDiv = document.createElement('div');
+    outputDiv.className = 'anim-desc';
+    outputDiv.style.marginTop = '12px';
+    outputDiv.innerHTML = `<p style="color:var(--green);font-weight:600;">${step.output}</p>`;
+    const stage = document.querySelector('.anim-stage');
+    const existing = stage.querySelector('.anim-desc');
+    if (!existing) stage.appendChild(outputDiv);
+  }
+
+  // Navigation
+  document.getElementById('animPrevBtn').disabled = currentStep === 0;
+  document.getElementById('animNextBtn').disabled = currentStep === ANIM_STEPS.length - 1;
+  document.getElementById('animCounter').textContent = `${currentStep + 1} / ${ANIM_STEPS.length}`;
+
+  // Dots
+  const dotsEl = document.getElementById('animDots');
+  dotsEl.innerHTML = ANIM_STEPS.map((_, i) =>
+    `<div class="step-dot ${i === currentStep ? 'active' : ''}" onclick="goToStep(${i})"></div>`
+  ).join('');
+}
+
+function animNext() {
+  if (currentStep < ANIM_STEPS.length - 1) {
+    currentStep++;
+    renderAnimStep();
+  }
+}
+
+function animPrev() {
+  if (currentStep > 0) {
+    currentStep--;
+    renderAnimStep();
+  }
+}
+
+function goToStep(idx) {
+  currentStep = idx;
+  renderAnimStep();
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAnimModal();
+});
+
+// Close modal on backdrop click
+document.getElementById('animModal').addEventListener('click', (e) => {
+  if (e.target.id === 'animModal') closeAnimModal();
+});
 
 render();
 </script>

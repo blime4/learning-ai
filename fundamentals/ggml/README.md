@@ -32,13 +32,13 @@ GGML tensor example
 ctx mem size: 16777216
 ctx mem used: 0
 x tensor type: f32
-x tensor backend: 0 
+x tensor backend: 0
 x tensor dimensions: 1
 x tensor data: 0x7f0b48022190
 x tensor operation: NONE, none
 x tensor grad: (nil)
 x tensor src: 0x7f0b480220d8
-x tensor name: 
+x tensor name:
 x tensor is_param: 0
 updated tensor data: 18.000000
 updated tensor name: updated
@@ -46,7 +46,7 @@ matrix ne[0]: 3
 matrix ne[1]: 2
 matrix nb[0]: 4
 matrix nb[1]: 12
-matrix name: 
+matrix name:
 ```
 
 ### Graph example
@@ -65,7 +65,7 @@ CONST 0 [1, 1]
 ```
 So this is a constant and 0 is the index of this leaf in the graph. The `[1, 1]`
 is `ne`, number of elements array where nb[0] is the number of bytes to move to
-get to the next element in a row. 
+get to the next element in a row.
 
 
 ### Multidiminensional tensor example
@@ -94,9 +94,9 @@ Which can be visualized like this:
     | 2 | 3 |
     +---+---+
     | 4 | 5 |
-    +---+---+ 
+    +---+---+
 
-ne[0] = 2 
+ne[0] = 2
 ne[1] = 3
 
 nb[0] = 4 (size of each element, moving this number will move to the next column)
@@ -108,9 +108,9 @@ Memory layout:
     row 1      row 2        row 3
              ↑
              8 (ne[1])
-```  
+```
 
-An example of this can be found in [matrix-mul.c](./src/matrix-mul.c) and
+An example of this can be found in [matrix-mul.cpp](./src/matrix-mul.cpp) and
 the compute graphs looks like this:
 
 ![image](./mul.dot.png)
