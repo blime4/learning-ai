@@ -81,65 +81,87 @@
 
   footer { text-align: center; padding: 32px 0; color: var(--muted); font-size: 0.8em; }
 
-  /* Animation Modal Styles */
-  .anim-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
-  .anim-modal.open { display: flex; }
-  .anim-content { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 90%; max-width: 900px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
-  .anim-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
-  .anim-header h3 { font-size: 1.1em; display: flex; align-items: center; gap: 8px; }
-  .anim-close { background: none; border: none; color: var(--muted); font-size: 1.5em; cursor: pointer; padding: 4px 8px; line-height: 1; }
-  .anim-close:hover { color: var(--text); }
-  .anim-body { flex: 1; overflow-y: auto; padding: 20px; }
-
-  /* Animation Stage */
-  .anim-stage { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; min-height: 180px; overflow-x: auto; }
-  .anim-title { font-size: 0.85em; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .linked-list { display: flex; align-items: center; gap: 8px; min-width: max-content; padding: 20px 10px; }
-  .ll-node { background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: center; min-width: 70px; transition: all 0.4s ease; position: relative; }
-  .ll-node.active { border-color: var(--accent); box-shadow: 0 0 20px rgba(88,166,255,0.3); }
-  .ll-node.merged { border-color: var(--green); background: rgba(63,185,80,0.1); }
-  .ll-node .char { font-size: 1.4em; font-weight: 700; color: var(--text); }
-  .ll-node .meta { font-size: 0.7em; color: var(--muted); margin-top: 4px; font-family: monospace; }
-  .ll-arrow { color: var(--accent); font-size: 1.2em; opacity: 0.6; }
-  .ll-arrow.inactive { opacity: 0.15; }
-
-  /* Queue visualization */
-  .queue-area { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
-  .queue-items { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-  .queue-item { background: var(--border); padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-family: monospace; }
-  .queue-item.top { background: var(--accent); color: #000; }
-  .queue-item.done { opacity: 0.4; text-decoration: line-through; }
-
-  /* Description */
-  .anim-desc { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.2); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
-  .anim-desc h4 { font-size: 0.95em; margin-bottom: 8px; color: var(--accent); }
-  .anim-desc p { font-size: 0.85em; color: var(--text); line-height: 1.6; margin: 0; }
-
-  /* Code block */
-  .anim-code { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .anim-code pre { margin: 0; padding: 16px; overflow-x: auto; font-size: 0.8em; line-height: 1.5; }
-  .anim-code code { font-family: 'JetBrains Mono', 'Fira Code', monospace; color: var(--muted); }
-  .anim-code .line { display: block; padding: 2px 8px; margin: 0 -8px; border-radius: 4px; }
-  .anim-code .line.hl { background: rgba(88,166,255,0.15); color: var(--text); }
-  .anim-code .keyword { color: var(--purple); }
-  .anim-code .string { color: var(--green); }
-  .anim-code .comment { color: var(--muted); font-style: italic; }
-  .anim-code .number { color: var(--orange); }
-
-  /* Navigation */
-  .anim-nav { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 16px 20px; border-top: 1px solid var(--border); }
-  .anim-nav button { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }
-  .anim-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .anim-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
-  .step-dots { display: flex; gap: 6px; }
-  .step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.2s; }
-  .step-dot.active { background: var(--accent); transform: scale(1.2); }
-  .step-dot:hover { background: var(--muted); }
-  .step-counter { font-size: 0.8em; color: var(--muted); }
-
   /* Animation button in items */
   .anim-btn { background: linear-gradient(135deg, var(--accent), var(--purple)); border: none; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; cursor: pointer; margin-left: 8px; transition: transform 0.2s, box-shadow 0.2s; }
   .anim-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(88,166,255,0.3); }
+
+  /* ========== ALGORITHM VISUALIZATION MODAL ========== */
+  .viz-modal { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; }
+  .viz-modal.open { display: flex; flex-direction: column; }
+
+  .viz-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: #111; border-bottom: 1px solid #222; }
+  .viz-title { font-size: 1.1em; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .viz-title .badge { font-size: 0.7em; padding: 2px 8px; background: var(--accent); color: #000; border-radius: 4px; }
+  .viz-close { background: none; border: none; color: var(--muted); font-size: 1.8em; cursor: pointer; line-height: 1; padding: 0 4px; }
+  .viz-close:hover { color: var(--text); }
+
+  .viz-main { flex: 1; display: flex; overflow: hidden; }
+
+  /* Canvas area */
+  .viz-canvas { flex: 1; display: flex; flex-direction: column; background: linear-gradient(180deg, #0a0e14 0%, #0d1117 100%); position: relative; overflow: hidden; }
+  .viz-canvas-inner { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
+
+  /* Array visualization */
+  .viz-array { display: flex; align-items: flex-start; gap: 0; position: relative; }
+  .viz-cell { width: 64px; height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1a1f2a; border: 2px solid #2d3748; border-radius: 8px; position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+  .viz-cell.highlight { border-color: var(--accent); box-shadow: 0 0 20px rgba(88,166,255,0.4); z-index: 10; }
+  .viz-cell.merged { border-color: var(--green); background: rgba(63,185,80,0.15); }
+  .viz-cell.deleted { opacity: 0.2; transform: scale(0.8); }
+  .viz-cell.proc { border-color: var(--orange); }
+
+  .viz-char { font-size: 1.6em; font-weight: 700; color: #fff; }
+  .viz-idx { font-size: 0.65em; color: var(--muted); position: absolute; top: 4px; left: 6px; }
+  .viz-ptr { font-size: 0.6em; color: #666; margin-top: 4px; font-family: monospace; }
+
+  /* Arrows between cells */
+  .viz-arrow { width: 24px; display: flex; align-items: center; justify-content: center; color: #3d4a5c; font-size: 1.2em; transition: all 0.3s; }
+  .viz-arrow.hidden { opacity: 0; }
+
+  /* Queue visualization */
+  .viz-queue { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(17,20,28,0.95); border: 1px solid #2d3748; border-radius: 12px; padding: 16px 20px; min-width: 300px; }
+  .viz-queue-title { font-size: 0.7em; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .viz-queue-items { display: flex; gap: 8px; flex-wrap: wrap; }
+  .viz-queue-item { padding: 4px 10px; background: #2d3748; border-radius: 4px; font-size: 0.75em; font-family: monospace; transition: all 0.3s; }
+  .viz-queue-item.top { background: var(--accent); color: #000; font-weight: 600; }
+  .viz-queue-item.done { opacity: 0.3; text-decoration: line-through; }
+
+  /* Info panel */
+  .viz-info { width: 360px; background: #111; border-left: 1px solid #222; display: flex; flex-direction: column; overflow: hidden; }
+  .viz-info-header { padding: 16px 20px; border-bottom: 1px solid #222; }
+  .viz-step-num { font-size: 0.75em; color: var(--accent); margin-bottom: 4px; }
+  .viz-step-title { font-size: 1em; font-weight: 600; }
+
+  .viz-info-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .viz-section { margin-bottom: 20px; }
+  .viz-section-title { font-size: 0.7em; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .viz-desc { font-size: 0.9em; color: var(--text); line-height: 1.7; }
+  .viz-desc code { background: #1a1f2a; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; color: var(--accent); }
+
+  /* Code block */
+  .viz-code { background: #0a0e14; border-radius: 8px; padding: 12px; overflow-x: auto; }
+  .viz-code pre { margin: 0; font-size: 0.8em; line-height: 1.6; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+  .viz-code .line { padding: 2px 8px; margin: 0 -8px; border-radius: 4px; color: #8b949e; }
+  .viz-code .line.hl { background: rgba(88,166,255,0.12); color: #fff; }
+  .viz-code .kw { color: var(--purple); }
+  .viz-code .fn { color: var(--accent); }
+  .viz-code .str { color: var(--green); }
+  .viz-code .cmt { color: #555; font-style: italic; }
+
+  /* Controls */
+  .viz-controls { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background: #0a0e14; border-top: 1px solid #222; }
+  .viz-ctrl-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #1a1f2a; border: 1px solid #2d3748; border-radius: 8px; color: var(--text); cursor: pointer; font-size: 1.1em; transition: all 0.2s; }
+  .viz-ctrl-btn:hover:not(:disabled) { background: #2d3748; border-color: var(--accent); }
+  .viz-ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .viz-ctrl-btn.primary { background: var(--accent); border-color: var(--accent); color: #000; }
+
+  .viz-progress { flex: 1; height: 4px; background: #2d3748; border-radius: 2px; margin: 0 16px; cursor: pointer; position: relative; }
+  .viz-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+  .viz-progress-text { font-size: 0.75em; color: var(--muted); min-width: 60px; text-align: right; }
+
+  /* Output box */
+  .viz-output { background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.3); border-radius: 8px; padding: 12px; margin-top: 12px; }
+  .viz-output-label { font-size: 0.7em; color: var(--green); text-transform: uppercase; margin-bottom: 4px; }
+  .viz-output-value { font-family: monospace; color: var(--green); font-size: 0.9em; }
 </style>
 </head>
 <body>
@@ -178,35 +200,55 @@
   <footer>数据保存在浏览器 localStorage · 基于 <a href="https://github.com/blime4/learning-ai" style="color:var(--accent)">learning-ai</a> 仓库</footer>
 </div>
 
-<!-- Animation Modal -->
-<div class="anim-modal" id="animModal">
-  <div class="anim-content">
-    <div class="anim-header">
-      <h3>🎬 BPE 分词动画讲解</h3>
-      <button class="anim-close" onclick="closeAnimModal()">&times;</button>
+<!-- Visualization Modal -->
+<div class="viz-modal" id="vizModal">
+  <div class="viz-header">
+    <div class="viz-title">
+      BPE 分词算法可视化
+      <span class="badge">llama.cpp</span>
     </div>
-    <div class="anim-body">
-      <div class="anim-stage">
-        <div class="anim-title">链表可视化 (llm_symbol)</div>
-        <div class="linked-list" id="animLinkedList"></div>
-        <div class="queue-area" id="animQueueArea" style="display:none;">
-          <div class="anim-title">优先队列 (work_queue)</div>
-          <div class="queue-items" id="animQueue"></div>
+    <button class="viz-close" onclick="closeViz()">&times;</button>
+  </div>
+  <div class="viz-main">
+    <div class="viz-canvas">
+      <div class="viz-canvas-inner">
+        <div class="viz-array" id="vizArray"></div>
+      </div>
+      <div class="viz-queue" id="vizQueueBox" style="display:none;">
+        <div class="viz-queue-title">优先队列 (按 rank 排序)</div>
+        <div class="viz-queue-items" id="vizQueue"></div>
+      </div>
+    </div>
+    <div class="viz-info">
+      <div class="viz-info-header">
+        <div class="viz-step-num" id="vizStepNum">STEP 1/6</div>
+        <div class="viz-step-title" id="vizStepTitle">初始化</div>
+      </div>
+      <div class="viz-info-body">
+        <div class="viz-section">
+          <div class="viz-section-title">说明</div>
+          <div class="viz-desc" id="vizDesc"></div>
+        </div>
+        <div class="viz-section">
+          <div class="viz-section-title">代码</div>
+          <div class="viz-code"><pre id="vizCode"></pre></div>
+        </div>
+        <div id="vizOutputBox" style="display:none;">
+          <div class="viz-output">
+            <div class="viz-output-label">输出</div>
+            <div class="viz-output-value" id="vizOutput"></div>
+          </div>
         </div>
       </div>
-      <div class="anim-desc">
-        <h4 id="animStepTitle">步骤标题</h4>
-        <p id="animStepDesc">步骤描述</p>
+      <div class="viz-controls">
+        <button class="viz-ctrl-btn" id="vizPrevBtn" onclick="vizPrev()">◀</button>
+        <button class="viz-ctrl-btn primary" id="vizPlayBtn" onclick="vizTogglePlay()">▶</button>
+        <button class="viz-ctrl-btn" id="vizNextBtn" onclick="vizNext()">▶</button>
+        <div class="viz-progress" onclick="vizSeek(event)">
+          <div class="viz-progress-fill" id="vizProgressFill"></div>
+        </div>
+        <span class="viz-progress-text" id="vizProgressText">1 / 6</span>
       </div>
-      <div class="anim-code">
-        <pre><code id="animCode"></code></pre>
-      </div>
-    </div>
-    <div class="anim-nav">
-      <button id="animPrevBtn" onclick="animPrev()">◀ 上一步</button>
-      <div class="step-dots" id="animDots"></div>
-      <span class="step-counter" id="animCounter">1 / 8</span>
-      <button id="animNextBtn" onclick="animNext()">下一步 ▶</button>
     </div>
   </div>
 </div>
@@ -246,7 +288,7 @@ const PHASES = [
     {n:'23', files:['notes/llama.cpp/convert-dequantize.md'], desc:'反量化过程'},
     {n:'24', files:['notes/llama.cpp/devstral2-conversion.md'], desc:'Devstral2 转换实例'},
     {n:'25', files:['notes/llama.cpp/convert-mamba-issue.md'], desc:'Mamba 转换问题'},
-    {n:'26', files:['notes/llama.cpp/gemma-bos-issue.md'], desc:'Gemma BOS token 问题'},
+    {n:'26', files:['notes/llama.cpp/gema-bos-issue.md'], desc:'Gemma BOS token 问题'},
   ]},
   {icon:'🔢', title:'第五阶段：Embeddings', items:[
     {n:'27', files:['fundamentals/llama.cpp/src/embeddings.cpp'], desc:'embedding 生成代码'},
@@ -308,22 +350,17 @@ function calcStreak() {
   if (!s.dates.length) return 0;
   let streak = 0;
   let d = new Date(); d.setHours(0,0,0,0);
-  // check if today is in dates
   const tStr = todayStr();
-  if (!s.dates.includes(tStr)) {
-    d.setDate(d.getDate() - 1);
-  }
+  if (!s.dates.includes(tStr)) d.setDate(d.getDate() - 1);
   while (true) {
     const ds = d.toISOString().slice(0,10);
-    if (s.dates.includes(ds)) { streak++; d.setDate(d.getDate()-1); }
-    else break;
+    if (s.dates.includes(ds)) { streak++; d.setDate(d.getDate()-1); } else break;
   }
   return streak;
 }
 
 function updateStreak() {
   document.getElementById('streakCount').textContent = calcStreak();
-  // render last 14 days
   const cal = document.getElementById('streakCal');
   cal.innerHTML = '';
   const s = loadStreak();
@@ -357,7 +394,7 @@ function render() {
       const doneDate = data[key]?.date || '';
       if (checked) { phaseDone++; totalDone++; }
       const filesHtml = item.files.map(f => `<a href="${REPO}${f}" target="_blank">${f.split('/').pop()}</a>`).join(' / ');
-      const animBtn = item.anim ? `<button class="anim-btn" onclick="event.stopPropagation(); openAnimModal();">🎬 动画讲解</button>` : '';
+      const animBtn = item.anim ? `<button class="anim-btn" onclick="event.stopPropagation();openViz();">▶ 动画</button>` : '';
       itemsHtml += `
         <div class="item ${checked?'checked':''}">
           <input type="checkbox" ${checked?'checked':''} data-key="${key}">
@@ -385,7 +422,6 @@ function render() {
     container.appendChild(div);
   });
 
-  // Update overall
   const pct = totalAll ? Math.round(totalDone / totalAll * 100) : 0;
   document.getElementById('overallFill').style.width = pct + '%';
   document.getElementById('overallText').textContent = `${totalDone} / ${totalAll} 完成 (${pct}%)`;
@@ -393,17 +429,12 @@ function render() {
   document.getElementById('statTodo').textContent = totalAll - totalDone;
   document.getElementById('statDays').textContent = totalAll - totalDone;
 
-  // Bind checkboxes
   document.querySelectorAll('.item input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', function() {
       const d = load();
       const key = this.dataset.key;
-      if (this.checked) {
-        d[key] = { done: true, date: todayStr() };
-        recordToday();
-      } else {
-        delete d[key];
-      }
+      if (this.checked) { d[key] = { done: true, date: todayStr() }; recordToday(); }
+      else delete d[key];
       save(d);
       render();
     });
@@ -431,13 +462,8 @@ function importProgress() {
     const f = e.target.files[0]; if (!f) return;
     const r = new FileReader();
     r.onload = ev => {
-      try {
-        const d = JSON.parse(ev.target.result);
-        if (d.progress) save(d.progress);
-        if (d.streak) saveStreak(d.streak);
-        render();
-        alert('导入成功！');
-      } catch { alert('JSON 格式错误'); }
+      try { const d = JSON.parse(ev.target.result); if (d.progress) save(d.progress); if (d.streak) saveStreak(d.streak); render(); alert('导入成功！'); }
+      catch { alert('JSON 格式错误'); }
     };
     r.readAsText(f);
   };
@@ -451,280 +477,207 @@ function resetAll() {
   render();
 }
 
-// ========== Animation Modal ==========
-const ANIM_STEPS = [
+// ========== Visualization ==========
+const VIZ_STEPS = [
   {
-    title: "步骤 1: UTF-8 字符拆分",
-    desc: "将输入文本 'hello' 拆分为 UTF-8 字符。每个字符创建一个 llm_symbol 结构，包含 text 指针和长度 n。unicode_len_utf8() 函数根据首字节判断字符长度(1-4字节)。",
-    code: `<span class="line">while (offs < text.size()) {</span>
-<span class="line hl">    sym.text = text.c_str() + offs;</span>
-<span class="line hl">    sym.n = unicode_len_utf8(text[offs]);</span>
-<span class="line">    offs += sym.n;</span>
-<span class="line">    symbols.emplace_back(sym);</span>
-<span class="line">}</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1},
-      {text:'l',prev:1,next:3,idx:2},
-      {text:'l',prev:2,next:4,idx:3},
-      {text:'o',prev:3,next:-1,idx:4}
+    title: "输入文本 → 字符数组",
+    desc: "输入文本 <code>\"hello\"</code> 被拆分为 UTF-8 字符。每个字符存入 <code>llm_symbol</code> 结构，形成数组。使用 <code>unicode_len_utf8()</code> 判断每个字符的字节长度。",
+    code: `<span class="line">text = "hello"</span>
+<span class="line hl">for each char in text:</span>
+<span class="line hl">    symbols.push({text: char, n: len(char)})</span>`,
+    cells: [
+      {char:'h',idx:0},{char:'e',idx:1},{char:'l',idx:2},{char:'l',idx:3},{char:'o',idx:4}
     ],
-    active: [0,1,2,3,4],
+    highlight: [],
     queue: [],
     showQueue: false
   },
   {
-    title: "步骤 2: 构建双向链表",
-    desc: "为每个 symbol 设置 prev 和 next 指针，形成双向链表。prev 指向前一个字符的索引，next 指向下一个字符的索引。首元素的 prev=-1，末元素的 next=-1。",
-    code: `<span class="line">sym.prev = index - 1;</span>
-<span class="line hl">sym.next = offs == text.size() ? -1 : index + 1;</span>
-<span class="line">index++;</span>
-<span class="line">symbols.emplace_back(sym);</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0,showPtr:true},
-      {text:'e',prev:0,next:2,idx:1,showPtr:true},
-      {text:'l',prev:1,next:3,idx:2,showPtr:true},
-      {text:'l',prev:2,next:4,idx:3,showPtr:true},
-      {text:'o',prev:3,next:-1,idx:4,showPtr:true}
+    title: "构建双向链表",
+    desc: "为每个 symbol 设置 <code>prev</code> 和 <code>next</code> 指针。首元素 prev=-1，末元素 next=-1。这样可以通过修改指针来'删除'元素，而无需移动内存数据。",
+    code: `<span class="line hl">symbols[0] = {char:'h', prev:-1, next:1}</span>
+<span class="line hl">symbols[1] = {char:'e', prev:0,  next:2}</span>
+<span class="line">symbols[2] = {char:'l', prev:1,  next:3}</span>
+<span class="line">// ...</span>`,
+    cells: [
+      {char:'h',idx:0,ptr:'-1,1'},{char:'e',idx:1,ptr:'0,2'},{char:'l',idx:2,ptr:'1,3'},{char:'l',idx:3,ptr:'2,4'},{char:'o',idx:4,ptr:'3,-1'}
     ],
-    active: [0,1,2,3,4],
+    highlight: [0,1,2,3,4],
     queue: [],
     showQueue: false
   },
   {
-    title: "步骤 3: 初始化 Bigram 队列",
-    desc: "遍历所有相邻字符对，调用 try_add_bigram(i-1, i)。如果这对字符在 bpe_ranks 中存在，则创建 bigram 并加入优先队列。队列按 rank 排序（值越小优先级越高）。",
-    code: `<span class="line hl">// seed the work queue with all possible 2-char tokens</span>
-<span class="line hl">for (size_t i = 1; i < symbols.size(); ++i) {</span>
-<span class="line hl">    try_add_bigram(i - 1, i);</span>
-<span class="line">}</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1},
-      {text:'l',prev:1,next:3,idx:2},
-      {text:'l',prev:2,next:4,idx:3},
-      {text:'o',prev:3,next:-1,idx:4}
+    title: "扫描所有相邻对，加入优先队列",
+    desc: "遍历链表，对每对相邻字符调用 <code>try_add_bigram(i-1, i)</code>。如果在 <code>bpe_ranks</code> 中找到该对，则创建 bigram 加入优先队列。<code>rank</code> 值越小优先级越高（训练时出现频率越高）。",
+    code: `<span class="line hl">for i in 1..n:</span>
+<span class="line hl">    rank = bpe_ranks.find(s[i-1], s[i])</span>
+<span class="line">    if rank >= 0:</span>
+<span class="line">        queue.push({left:i-1, right:i, rank})</span>`,
+    cells: [
+      {char:'h',idx:0},{char:'e',idx:1,highlight:true},{char:'l',idx:2,highlight:true},{char:'l',idx:3,highlight:true},{char:'o',idx:4,highlight:true}
     ],
-    active: [1,2,3],  // 正在处理的相邻对
-    queue: ['l+l(rank=5)', 'l+o(rank=12)'],
+    highlight: [1,2,3],
+    queue: [{text:'l+l',rank:5,top:true},{text:'l+o',rank:12}],
     showQueue: true
   },
   {
-    title: "步骤 4: 查找 BPE Rank",
-    desc: "find_bpe_rank() 在 bpe_ranks 映射中查找字符对的合并优先级。rank 值越小表示该合并规则在训练中出现频率越高，应该优先执行。这里 'l'+'l' 的 rank=5 是最小的。",
-    code: `<span class="line">auto it = bpe_ranks.find(std::make_pair(token_left, token_right));</span>
-<span class="line">if (it == bpe_ranks.end()) return -1;</span>
-<span class="line hl">return it->second;  // return rank</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1},
-      {text:'l',prev:1,next:3,idx:2,active:true},
-      {text:'l',prev:2,next:4,idx:3,active:true},
-      {text:'o',prev:3,next:-1,idx:4}
+    title: "弹出 rank 最小的 bigram 并合并",
+    desc: "从队列弹出 <code>l+l (rank=5)</code>。将右侧 symbol 合并到左侧：<code>left.n += right.n</code>，<code>right.n = 0</code> 标记删除。更新链表指针跳过已删除节点。",
+    code: `<span class="line hl">bigram = queue.pop()  // l+l, rank=5</span>
+<span class="line hl">symbols[2].n += symbols[3].n  // "ll"</span>
+<span class="line hl">symbols[3].n = 0  // deleted</span>
+<span class="line">symbols[2].next = symbols[3].next</span>`,
+    cells: [
+      {char:'h',idx:0},{char:'e',idx:1},{char:'ll',idx:2,merged:true},{char:'×',idx:3,deleted:true},{char:'o',idx:4}
     ],
-    active: [2,3],
-    queue: ['<span class="top">l+l(rank=5)</span>', 'l+o(rank=12)'],
+    highlight: [2],
+    queue: [{text:'l+l',rank:5,done:true},{text:'l+o',rank:12}],
     showQueue: true
   },
   {
-    title: "步骤 5: 弹出最高优先级 Bigram",
-    desc: "从优先队列弹出 rank 最小的 bigram。work_queue.top() 返回队首元素(l+l, rank=5)，work_queue.pop() 将其移除。这是 BPE 算法的核心：总是先合并最高频的字符对。",
-    code: `<span class="line">while (!work_queue.empty()) {</span>
-<span class="line hl">    auto bigram = work_queue.top();  // l+l, rank=5</span>
-<span class="line hl">    work_queue.pop();</span>
-<span class="line">    // ... process merge</span>
-<span class="line">}</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1},
-      {text:'l',prev:1,next:3,idx:2,active:true},
-      {text:'l',prev:2,next:4,idx:3,active:true},
-      {text:'o',prev:3,next:-1,idx:4}
+    title: "添加新的相邻 bigram",
+    desc: "合并后产生新的相邻对：<code>e-ll</code> 和 <code>ll-o</code>。检查它们是否在 <code>bpe_ranks</code> 中，若存在则加入队列。继续循环直到队列为空。",
+    code: `<span class="line hl">add_bigran(symbols[2].prev, 2)  // e-ll</span>
+<span class="line hl">add_bigrak(2, symbols[2].next)   // ll-o</span>
+<span class="line">// 继续处理队列中下一个 bigram</span>`,
+    cells: [
+      {char:'h',idx:0},{char:'e',idx:1,highlight:true},{char:'ll',idx:2,merged:true,highlight:true},{char:'×',idx:3,deleted:true},{char:'o',idx:4,highlight:true}
     ],
-    active: [2,3],
-    queue: ['<span class="done">l+l(rank=5)</span>', 'l+o(rank=12)'],
+    highlight: [1,2,4],
+    queue: [{text:'e+ll',rank:8,top:true},{text:'ll+o',rank:15}],
     showQueue: true
   },
   {
-    title: "步骤 6: 执行合并",
-    desc: "将右侧 symbol 合并到左侧：left_symbol.n += right_symbol.n（长度相加），right_symbol.n = 0（标记为已删除）。然后更新链表指针：left_symbol.next 跳过 right，直接指向 right 的下一个。",
-    code: `<span class="line hl">// merge the right sym into the left one</span>
-<span class="line hl">left_symbol.n += right_symbol.n;  // "l" + "l" = "ll"</span>
-<span class="line hl">right_symbol.n = 0;  // mark as deleted</span>
-<span class="line">left_symbol.next = right_symbol.next;</span>
-<span class="line">symbols[right_symbol.next].prev = bigram.left;</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1},
-      {text:'ll',prev:1,next:4,idx:2,merged:true},
-      {text:'',prev:2,next:4,idx:3,deleted:true},
-      {text:'o',prev:2,next:-1,idx:4}
+    title: "遍历链表，输出 Token ID",
+    desc: "BPE 合并完成后，从链表头开始遍历。对每个 symbol 调用 <code>token_to_id</code> 查找对应的 token ID。最终输出 token ID 序列，送入模型进行推理。",
+    code: `<span class="line hl">for i in linked_list:</span>
+<span class="line hl">    token_id = token_to_id[symbols[i].text]</span>
+<span class="line">    output.append(token_id)</span>`,
+    cells: [
+      {char:'h',idx:0,highlight:true},{char:'e',idx:1,highlight:true},{char:'ll',idx:2,merged:true,highlight:true},{char:'×',idx:3,deleted:true},{char:'o',idx:4,highlight:true}
     ],
-    active: [2],
-    queue: ['l+o(rank=12)'],
-    showQueue: true
-  },
-  {
-    title: "步骤 7: 添加新 Bigram",
-    desc: "合并后需要检查新产生的相邻对。调用 add_new_bigram(left_symbol.prev, bigram.left) 添加左侧新对(e-ll)，add_new_bigram(bigram.left, left_symbol.next) 添加右侧新对(ll-o)。",
-    code: `<span class="line hl">add_new_bigram(left_symbol.prev, bigram.left);  // e-ll</span>
-<span class="line hl">add_new_bigram(bigram.left, left_symbol.next);  // ll-o</span>
-<span class="line">// 继续循环，处理队列中的下一个 bigram</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1,active:true},
-      {text:'ll',prev:1,next:4,idx:2,merged:true,active:true},
-      {text:'',prev:2,next:4,idx:3,deleted:true},
-      {text:'o',prev:2,next:-1,idx:4,active:true}
-    ],
-    active: [1,2,4],
-    queue: ['l+o(rank=12)', 'e+ll(rank=8)', 'll+o(rank=15)'],
-    showQueue: true
-  },
-  {
-    title: "步骤 8: Resegment 输出 Token ID",
-    desc: "BPE 合并完成后，遍历链表调用 resegment()。如果 symbol.text 在 token_to_id 中存在，直接输出 token ID；否则递归查找 rev_merge 映射，将合并后的 token 拆分回原始 token。最终输出 token ID 序列。",
-    code: `<span class="line">for (int i = 0; i != -1; i = symbols[i].next) {</span>
-<span class="line hl">    resegment(symbol, output);</span>
-<span class="line">}</span>
-<span class="line"></span>
-<span class="line hl">// resegment: token_to_id.find(text) -> output token ID</span>`,
-    symbols: [
-      {text:'h',prev:-1,next:1,idx:0},
-      {text:'e',prev:0,next:2,idx:1},
-      {text:'ll',prev:1,next:4,idx:2,merged:true},
-      {text:'',prev:2,next:4,idx:3,deleted:true},
-      {text:'o',prev:2,next:-1,idx:4}
-    ],
-    active: [0,1,2,4],
+    highlight: [0,1,2,4],
     queue: [],
     showQueue: false,
-    output: 'Output: [h, e, ll, o] → token IDs'
+    output: "[104, 101, 267, 111]"
   }
 ];
 
-let currentStep = 0;
+let vizStep = 0;
+let vizPlaying = false;
+let vizTimer = null;
 
-function openAnimModal() {
-  currentStep = 0;
-  renderAnimStep();
-  document.getElementById('animModal').classList.add('open');
+function openViz() {
+  vizStep = 0;
+  vizPlaying = false;
+  renderViz();
+  document.getElementById('vizModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function closeAnimModal() {
-  document.getElementById('animModal').classList.remove('open');
+function closeViz() {
+  document.getElementById('vizModal').classList.remove('open');
   document.body.style.overflow = '';
+  if (vizTimer) { clearTimeout(vizTimer); vizTimer = null; }
+  vizPlaying = false;
 }
 
-function renderAnimStep() {
-  const step = ANIM_STEPS[currentStep];
+function renderViz() {
+  const step = VIZ_STEPS[vizStep];
+  document.getElementById('vizStepNum').textContent = `STEP ${vizStep + 1}/${VIZ_STEPS.length}`;
+  document.getElementById('vizStepTitle').textContent = step.title;
+  document.getElementById('vizDesc').innerHTML = step.desc;
+  document.getElementById('vizCode').innerHTML = step.code;
 
-  // Title and description
-  document.getElementById('animStepTitle').textContent = step.title;
-  document.getElementById('animStepDesc').textContent = step.desc;
-
-  // Code
-  document.getElementById('animCode').innerHTML = step.code;
-
-  // Render linked list
-  const listEl = document.getElementById('animLinkedList');
-  listEl.innerHTML = '';
-
-  step.symbols.forEach((sym, i) => {
-    if (sym.deleted) {
-      // Show deleted node with reduced opacity
-      const node = document.createElement('div');
-      node.className = 'll-node';
-      node.style.opacity = '0.2';
-      node.innerHTML = `<div class="char">×</div><div class="meta">del</div>`;
-      listEl.appendChild(node);
+  // Render cells
+  const arr = document.getElementById('vizArray');
+  arr.innerHTML = '';
+  step.cells.forEach((c, i) => {
+    if (c.deleted) {
+      arr.innerHTML += `<div class="viz-cell deleted"><div class="viz-char">×</div><div class="viz-idx">${c.idx}</div></div>`;
     } else {
-      const node = document.createElement('div');
-      node.className = 'll-node';
-      if (step.active.includes(i)) node.classList.add('active');
-      if (sym.merged) node.classList.add('merged');
-
-      let meta = `prev:${sym.prev}`;
-      if (sym.showPtr) meta += ` next:${sym.next}`;
-      node.innerHTML = `<div class="char">${sym.text}</div><div class="meta">${meta}</div>`;
-      listEl.appendChild(node);
+      const hl = step.highlight.includes(i) ? ' highlight' : '';
+      const mg = c.merged ? ' merged' : '';
+      const proc = c.highlight ? ' proc' : '';
+      arr.innerHTML += `<div class="viz-cell${hl}${mg}${proc}"><div class="viz-idx">${c.idx}</div><div class="viz-char">${c.char}</div>${c.ptr ? `<div class="viz-ptr">${c.ptr}</div>` : ''}</div>`;
     }
-
-    // Arrow (except after last visible node)
-    if (i < step.symbols.length - 1) {
-      const nextSym = step.symbols[i + 1];
-      const arrow = document.createElement('span');
-      arrow.className = 'll-arrow';
-      if (sym.deleted || (nextSym && nextSym.deleted)) {
-        arrow.classList.add('inactive');
-      }
-      arrow.textContent = '→';
-      listEl.appendChild(arrow);
+    if (i < step.cells.length - 1) {
+      const hidden = step.cells[i].deleted || step.cells[i+1].deleted;
+      arr.innerHTML += `<div class="viz-arrow${hidden ? ' hidden' : ''}">→</div>`;
     }
   });
 
   // Queue
-  const queueArea = document.getElementById('animQueueArea');
-  const queueEl = document.getElementById('animQueue');
-  if (step.showQueue && step.queue.length > 0) {
-    queueArea.style.display = 'block';
-    queueEl.innerHTML = step.queue.map(q => `<span class="queue-item">${q}</span>`).join('');
+  const qb = document.getElementById('vizQueueBox');
+  const q = document.getElementById('vizQueue');
+  if (step.showQueue && step.queue.length) {
+    qb.style.display = 'block';
+    q.innerHTML = step.queue.map(item => {
+      let cls = 'viz-queue-item';
+      if (item.top) cls += ' top';
+      if (item.done) cls += ' done';
+      return `<span class="${cls}">${item.text}(${item.rank})</span>`;
+    }).join('');
   } else {
-    queueArea.style.display = 'none';
+    qb.style.display = 'none';
   }
 
-  // Output (for final step)
+  // Output
+  const ob = document.getElementById('vizOutputBox');
   if (step.output) {
-    const outputDiv = document.createElement('div');
-    outputDiv.className = 'anim-desc';
-    outputDiv.style.marginTop = '12px';
-    outputDiv.innerHTML = `<p style="color:var(--green);font-weight:600;">${step.output}</p>`;
-    const stage = document.querySelector('.anim-stage');
-    const existing = stage.querySelector('.anim-desc');
-    if (!existing) stage.appendChild(outputDiv);
+    ob.style.display = 'block';
+    document.getElementById('vizOutput').textContent = step.output;
+  } else {
+    ob.style.display = 'none';
   }
 
-  // Navigation
-  document.getElementById('animPrevBtn').disabled = currentStep === 0;
-  document.getElementById('animNextBtn').disabled = currentStep === ANIM_STEPS.length - 1;
-  document.getElementById('animCounter').textContent = `${currentStep + 1} / ${ANIM_STEPS.length}`;
+  // Progress
+  const pct = ((vizStep + 1) / VIZ_STEPS.length) * 100;
+  document.getElementById('vizProgressFill').style.width = pct + '%';
+  document.getElementById('vizProgressText').textContent = `${vizStep + 1} / ${VIZ_STEPS.length}`;
 
-  // Dots
-  const dotsEl = document.getElementById('animDots');
-  dotsEl.innerHTML = ANIM_STEPS.map((_, i) =>
-    `<div class="step-dot ${i === currentStep ? 'active' : ''}" onclick="goToStep(${i})"></div>`
-  ).join('');
+  // Buttons
+  document.getElementById('vizPrevBtn').disabled = vizStep === 0;
+  document.getElementById('vizNextBtn').disabled = vizStep === VIZ_STEPS.length - 1;
+  document.getElementById('vizPlayBtn').textContent = vizPlaying ? '⏸' : '▶';
 }
 
-function animNext() {
-  if (currentStep < ANIM_STEPS.length - 1) {
-    currentStep++;
-    renderAnimStep();
+function vizNext() {
+  if (vizStep < VIZ_STEPS.length - 1) { vizStep++; renderViz(); }
+  else if (vizPlaying) { vizPlaying = false; renderViz(); }
+}
+
+function vizPrev() {
+  if (vizStep > 0) { vizStep--; renderViz(); }
+}
+
+function vizTogglePlay() {
+  vizPlaying = !vizPlaying;
+  renderViz();
+  if (vizPlaying) runViz();
+}
+
+function runViz() {
+  if (!vizPlaying) return;
+  if (vizStep < VIZ_STEPS.length - 1) {
+    vizTimer = setTimeout(() => { vizNext(); runViz(); }, 2500);
+  } else {
+    vizPlaying = false;
+    renderViz();
   }
 }
 
-function animPrev() {
-  if (currentStep > 0) {
-    currentStep--;
-    renderAnimStep();
-  }
+function vizSeek(e) {
+  const rect = e.target.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const pct = x / rect.width;
+  vizStep = Math.floor(pct * VIZ_STEPS.length);
+  vizStep = Math.max(0, Math.min(VIZ_STEPS.length - 1, vizStep));
+  renderViz();
 }
 
-function goToStep(idx) {
-  currentStep = idx;
-  renderAnimStep();
-}
-
-// Close modal on escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeAnimModal();
-});
-
-// Close modal on backdrop click
-document.getElementById('animModal').addEventListener('click', (e) => {
-  if (e.target.id === 'animModal') closeAnimModal();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeViz(); });
+document.getElementById('vizModal').addEventListener('click', e => { if (e.target.id === 'vizModal') closeViz(); });
 
 render();
 </script>
